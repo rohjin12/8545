@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>안내서비스 카테고리 안내</title>
+<style>
+:root{--bg:#f3f6f9;--panel:#fff;--ink:#14202e;--sub:#5a6b7d;--line:#d6dee7;--pri:#1b4a7a;--hit:#e6f0fa;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1620;--panel:#16222f;--ink:#e8eef5;--sub:#9fb0c1;--line:#2a3a4b;--pri:#6fa8dc;--hit:#1c3247}}
+:root[data-theme="dark"]{--bg:#0e1620;--panel:#16222f;--ink:#e8eef5;--sub:#9fb0c1;--line:#2a3a4b;--pri:#6fa8dc;--hit:#1c3247}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;line-height:1.6}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 18px 48px}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 6px;letter-spacing:-.02em}
+h2{font-size:18px;margin:34px 0 12px}
+.lead{color:var(--sub);margin:0;max-width:60ch}
+.news{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.news img{width:100%;height:auto;display:block;border-radius:6px;background:var(--line)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar input{flex:1 1 260px;min-width:0;padding:11px 14px;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px}
+.bar button,.card{font:inherit;color:inherit}
+.bar button{padding:11px 16px;background:var(--pri);color:var(--panel);border:0;border-radius:6px;cursor:pointer}
+input:focus-visible,button:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+#count{font-weight:700;margin:12px 0 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:14px}
+.card{text-align:left;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--pri);border-radius:6px;padding:14px 16px;cursor:pointer}
+.card[aria-pressed="true"]{background:var(--hit)}
+.card b{display:block;font-size:19px}
+.card .n{font-size:26px;font-weight:700;color:var(--pri)}
+.card small{display:block;color:var(--sub)}
+.note{color:var(--sub);font-size:13px;margin:10px 0 0}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:13px;color:var(--sub)}
+tr:last-child td{border-bottom:0}
+.empty{padding:22px;color:var(--sub)}
+@media (max-width:640px){.news{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<h1>안내서비스 카테고리 안내</h1>
+<p class="lead">민원·복지·세금 등 분야별 안내서비스와 문의기관을 한눈에 확인하세요.</p>
+
+<section class="news" aria-label="카드뉴스">
+<img src="images/카드뉴스1.png" width="1080" height="1080" alt="카드뉴스 1: 생활안전 캠페인 - 어린이·노인 보호, 4대 분야 추진, 참여 시설 확대">
+<img src="images/카드뉴스2.png" width="1080" height="1080" alt="카드뉴스 2: 어린이 안전 - 어린이집 안전 점검, 등하굣길 캠페인, 실내 안전 교육">
+<img src="images/카드뉴스3.png" width="1080" height="1080" alt="카드뉴스 3: 교통안전 - 신호 준수 캠페인, 방어운전 교육, 어르신 보행자 보호">
+<img src="images/카드뉴스4.png" width="1080" height="1080" alt="카드뉴스 4: 화재 예방 - 주거시설 점검, 전통시장 안전, 캠핑장 화재 예방">
+</section>
+
+<h2>카테고리별 안내서비스</h2>
+<form class="bar" role="search" onsubmit="return false">
+<label for="q" style="position:absolute;left:-9999px">카테고리 또는 문의기관 검색</label>
+<input id="q" type="search" placeholder="카테고리 또는 문의기관 (예: 복지, 국토교통부)" autocomplete="off">
+<button type="button" id="reset">전체 보기</button>
+</form>
+<p id="count" aria-live="polite"></p>
+<div class="cards" id="cards"></div>
+<p class="note">대표 문의기관은 카테고리에서 가장 많이 나온 기관이며, 동률이면 목록에서 먼저 나오는 기관입니다. 카드를 누르면 해당 카테고리로 검색됩니다.</p>
+
+<h2>안내서비스 목록</h2>
+<div class="tbl"><table>
+<thead><tr><th>서비스ID</th><th>서비스명</th><th>카테고리</th><th>문의기관</th><th>온라인안내</th><th>콜센터</th></tr></thead>
+<tbody id="rows"></tbody>
+</table><div class="empty" id="empty" hidden>일치하는 서비스가 없습니다. 카테고리명(예: 복지)이나 기관명(예: 국토교통부)으로 검색해 보세요.</div></div>
+</main>
+<script>
+const DATA = [
+ {
+  "서비스ID": "A001",
+  "서비스명": "주민등록 발급 안내",
+  "카테고리": "민원",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1374"
+ },
+ {
+  "서비스ID": "A002",
+  "서비스명": "전입신고 안내",
+  "카테고리": "민원",
+  "문의기관": "보건복지부",
+  "온라인안내": "가능",
+  "콜센터": "1352"
+ },
+ {
+  "서비스ID": "A003",
+  "서비스명": "인감증명 안내",
+  "카테고리": "민원",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1313"
+ },
+ {
+  "서비스ID": "A004",
+  "서비스명": "민원접수 안내",
+  "카테고리": "민원",
+  "문의기관": "교육부",
+  "온라인안내": "가능",
+  "콜센터": "1341"
+ },
+ {
+  "서비스ID": "A005",
+  "서비스명": "정부24 이용 안내",
+  "카테고리": "민원",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1356"
+ },
+ {
+  "서비스ID": "A006",
+  "서비스명": "기초연금 안내",
+  "카테고리": "복지",
+  "문의기관": "행정안전부",
+  "온라인안내": "불가",
+  "콜센터": "1386"
+ },
+ {
+  "서비스ID": "A007",
+  "서비스명": "복지급여 안내",
+  "카테고리": "복지",
+  "문의기관": "고용노동부",
+  "온라인안내": "가능",
+  "콜센터": "1319"
+ },
+ {
+  "서비스ID": "A008",
+  "서비스명": "장애인지원 안내",
+  "카테고리": "복지",
+  "문의기관": "보건복지부",
+  "온라인안내": "가능",
+  "콜센터": "1337"
+ },
+ {
+  "서비스ID": "A009",
+  "서비스명": "아동수당 안내",
+  "카테고리": "복지",
+  "문의기관": "지자체",
+  "온라인안내": "가능",
+  "콜센터": "1326"
+ },
+ {
+  "서비스ID": "A010",
+  "서비스명": "지방세 납부 안내",
+  "카테고리": "세금",
+  "문의기관": "보건복지부",
+  "온라인안내": "가능",
+  "콜센터": "1357"
+ },
+ {
+  "서비스ID": "A011",
+  "서비스명": "취득세 안내",
+  "카테고리": "세금",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1341"
+ },
+ {
+  "서비스ID": "A012",
+  "서비스명": "재산세 안내",
+  "카테고리": "세금",
+  "문의기관": "지자체",
+  "온라인안내": "가능",
+  "콜센터": "1317"
+ },
+ {
+  "서비스ID": "A013",
+  "서비스명": "자동차등록 안내",
+  "카테고리": "교통",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1399"
+ },
+ {
+  "서비스ID": "A014",
+  "서비스명": "운전면허 안내",
+  "카테고리": "교통",
+  "문의기관": "보건복지부",
+  "온라인안내": "불가",
+  "콜센터": "1357"
+ },
+ {
+  "서비스ID": "A015",
+  "서비스명": "주정차단속 안내",
+  "카테고리": "교통",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1367"
+ },
+ {
+  "서비스ID": "A016",
+  "서비스명": "재난지원금 안내",
+  "카테고리": "재난",
+  "문의기관": "행정안전부",
+  "온라인안내": "불가",
+  "콜센터": "1356"
+ },
+ {
+  "서비스ID": "A017",
+  "서비스명": "대피소 안내",
+  "카테고리": "재난",
+  "문의기관": "국세청",
+  "온라인안내": "가능",
+  "콜센터": "1359"
+ },
+ {
+  "서비스ID": "A018",
+  "서비스명": "안전신고 안내",
+  "카테고리": "재난",
+  "문의기관": "국세청",
+  "온라인안내": "가능",
+  "콜센터": "1357"
+ },
+ {
+  "서비스ID": "A019",
+  "서비스명": "국민취업지원 안내",
+  "카테고리": "일자리",
+  "문의기관": "지자체",
+  "온라인안내": "가능",
+  "콜센터": "1386"
+ },
+ {
+  "서비스ID": "A020",
+  "서비스명": "구직급여 안내",
+  "카테고리": "일자리",
+  "문의기관": "국토교통부",
+  "온라인안내": "불가",
+  "콜센터": "1350"
+ },
+ {
+  "서비스ID": "A021",
+  "서비스명": "청년일자리 안내",
+  "카테고리": "일자리",
+  "문의기관": "지자체",
+  "온라인안내": "가능",
+  "콜센터": "1392"
+ },
+ {
+  "서비스ID": "A022",
+  "서비스명": "평생교육 안내",
+  "카테고리": "교육",
+  "문의기관": "국토교통부",
+  "온라인안내": "가능",
+  "콜센터": "1379"
+ },
+ {
+  "서비스ID": "A023",
+  "서비스명": "학자금 안내",
+  "카테고리": "교육",
+  "문의기관": "지자체",
+  "온라인안내": "가능",
+  "콜센터": "1324"
+ },
+ {
+  "서비스ID": "A024",
+  "서비스명": "교육비지원 안내",
+  "카테고리": "교육",
+  "문의기관": "행정안전부",
+  "온라인안내": "가능",
+  "콜센터": "1368"
+ }
+];
+const $ = id => document.getElementById(id);
+const cats = [...new Set(DATA.map(d => d.카테고리))];
+function rep(rows){ // 최다 문의기관, 동률이면 먼저 나온 기관
+  const m = new Map();
+  rows.forEach(r => m.set(r.문의기관, (m.get(r.문의기관) || 0) + 1));
+  let best = "", n = 0;
+  for (const [k, v] of m) if (v > n) { best = k; n = v; }
+  return best;
+}
+function render(){
+  const q = $("q").value.trim().toLowerCase();
+  const hit = d => !q || d.카테고리.toLowerCase().includes(q) || d.문의기관.toLowerCase().includes(q);
+  const rows = DATA.filter(hit);
+  $("count").textContent = "결과 " + rows.length + "건";
+  $("cards").innerHTML = cats.map(c => {
+    const all = DATA.filter(d => d.카테고리 === c), m = all.filter(hit).length;
+    if (!m) return "";
+    const on = q && q === c.toLowerCase();
+    return '<button type="button" class="card" data-c="' + c + '" aria-pressed="' + !!on + '"><b>' + c +
+      '</b><span class="n">' + all.length + '건</span><small>대표 문의기관 ' + rep(all) + '</small>' +
+      (q ? '<small>검색 일치 ' + m + '건</small>' : '') + '</button>';
+  }).join("");
+  $("rows").innerHTML = rows.map(d => "<tr><td>" + d.서비스ID + "</td><td>" + d.서비스명 + "</td><td>" + d.카테고리 +
+    "</td><td>" + d.문의기관 + "</td><td>" + d.온라인안내 + "</td><td>" + d.콜센터 + "</td></tr>").join("");
+  $("empty").hidden = rows.length > 0;
+}
+$("q").addEventListener("input", render);
+$("reset").addEventListener("click", () => { $("q").value = ""; render(); });
+$("cards").addEventListener("click", e => {
+  const b = e.target.closest(".card");
+  if (b) { $("q").value = b.dataset.c; render(); }
+});
+render();
+</script>
+</body>
+</html>
